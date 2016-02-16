@@ -15,7 +15,7 @@ if os.path.isfile("files/welcome.jpg") == False:
 
 CHECKINTERVAL = 2
 start = datetime.time(12, 00)
-end = datetime.time(19, 00)
+end = datetime.time(23, 00)
 now = datetime.datetime.now().time()
 KNOWN_MACS = [line.rstrip('\n') for line in open('found_mac_addresses.txt')]
 
@@ -34,11 +34,10 @@ if __name__ == "__main__":
             if MAC in KNOWN_MACS:
                 continue
 
-            #if process.returncode == 0:
-            if 1:
+            if process.returncode == 0:
                 print("MAC Found: " + MAC)
                 with open("found_mac_addresses.txt", "a") as macaddresses:
                     macaddresses.write(MAC + "\n")
-                subprocess.Popen('bluetooth-sendto --device=' + MAC + ' files/welcome.jpg', shell=False, stdout=subprocess.PIPE)
+                subprocess.Popen('bluetooth-sendto --device=' + MAC + ' files/welcome.jpg', shell=True, stdout=subprocess.PIPE)
 
         time.sleep(CHECKINTERVAL)
