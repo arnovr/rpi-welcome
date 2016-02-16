@@ -17,12 +17,14 @@ if __name__ == "__main__":
         process = subprocess.Popen("/usr/bin/hcitool scan | grep -v Scanning | cut -f2", shell=True, stdout=subprocess.PIPE)
         process.wait()
 
-	print(process.stdout.read())
+	MACS = process.stdout.read()
+        for MAC in MACS.splitlines():
+ 	    print(MAC)
 
-        if process.returncode == 0:
-            print("Play Music")
-            #subprocess.Popen(['gnome-screensaver-command', '--deactivate'], shell=False, stdout=subprocess.PIPE)
-        if process.returncode == 1:
-            print("Stop Music")
+            if process.returncode == 0:
+                print("Play Music for" + MAC)
+		#subprocess.Popen(['gnome-screensaver-command', '--deactivate'], shell=False, stdout=subprocess.PIPE)
+            if process.returncode == 1:
+                print("Stop Music")
 
-        time.sleep(CHECKINTERVAL)
+            time.sleep(CHECKINTERVAL)
