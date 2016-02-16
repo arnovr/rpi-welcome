@@ -7,31 +7,29 @@ from optparse import OptionParser
 import subprocess
 import time
 import os.path
+import datetime
 
 if os.path.isfile("files/welcome.jpg") == False:
     print("Expecting possible file to send in files/welcome.jpg")
     sys.exit()
 
-CHECKINTERVAL = 2  # device pinged at this interval (seconds) when screen is unlocked
-start = datetime.time(8, 0)
+CHECKINTERVAL = 2
+start = datetime.time(12, 00)
 end = datetime.time(19, 00)
 now = datetime.datetime.now().time()
-
-if start > now < end:
-    print("invalid date")
-    sys.exit()
-
-
 KNOWN_MACS = [line.rstrip('\n') for line in open('found_mac_addresses.txt')]
 
 if __name__ == "__main__":
     while True:
-        #process = subprocess.Popen("/usr/bin/hcitool scan | grep -v Scanning | cut -f2", shell=True, stdout=subprocess.PIPE)
-        #process.wait()
+        if start > now or now > end:
+            print("Date surpassed curfew, wait quite a while")
+            time.sleep(600)
+            continue
 
-	    #MACS = process.stdout.read()
-        MACS = "64:77:91:B7:7A:58"
+        process = subprocess.Popen("/usr/bin/hcitool scan | grep -v Scanning | cut -f2", shell=True, stdout=subprocess.PIPE)
+        process.wait()
 
+	MACS = process.stdout.read()
         for MAC in MACS.splitlines():
             if MAC in KNOWN_MACS:
                 continue
