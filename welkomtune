@@ -27,4 +27,5 @@ if __name__ == "__main__":
             if process.returncode == 1:
                 print("Stop Music")
 
-            time.sleep(CHECKINTERVAL)
+
+        time.sleep(CHECKINTERVAL)
