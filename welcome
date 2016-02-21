@@ -37,8 +37,7 @@ if __name__ == "__main__":
             if process.returncode == 0:
                 print("MAC Found: " + MAC)
                 with open("found_mac_addresses.txt", "a") as macaddresses:
-                    #macaddresses.write(MAC + "\n")
-			print("")
+                    macaddresses.write(MAC + "\n")
 		
 		process = subprocess.Popen('sdptool browse ' + MAC, shell=True, stdout=subprocess.PIPE)
 		process.wait()
