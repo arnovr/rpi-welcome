@@ -55,7 +55,7 @@ if __name__ == "__main__":
 				CHECKING = True
     				continue
 
-		subprocess.Popen('obexftp -b ' + MAC + ' --channel ' + CHANNEL.strip() + ' -p files/welcome.jpg', shell=True, stdout=subprocess.PIPE)
-
+		process = subprocess.Popen('obexftp -b ' + MAC + ' --channel ' + CHANNEL.strip() + ' -p files/welcome.jpg', shell=True, stdout=subprocess.PIPE)
+		process.wait()
 		
         time.sleep(CHECKINTERVAL)
