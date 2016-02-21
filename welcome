@@ -21,7 +21,7 @@ KNOWN_MACS = [line.rstrip('\n') for line in open('found_mac_addresses.txt')]
 
 if __name__ == "__main__":
     while True:
-        if start > now or now > end:
+        if start < now and now > end:
             print("Date surpassed curfew, wait quite a while")
             time.sleep(600)
             continue
@@ -37,7 +37,25 @@ if __name__ == "__main__":
             if process.returncode == 0:
                 print("MAC Found: " + MAC)
                 with open("found_mac_addresses.txt", "a") as macaddresses:
-                    macaddresses.write(MAC + "\n")
-                subprocess.Popen('bluetooth-sendto --device=' + MAC + ' files/welcome.jpg', shell=True, stdout=subprocess.PIPE)
+                    #macaddresses.write(MAC + "\n")
+			print("")
+		
+		process = subprocess.Popen('sdptool browse ' + MAC, shell=True, stdout=subprocess.PIPE)
+		process.wait()
+		INPUT = process.stdout.read()
+		CHECKING = False
+		CHANNEL = 0
+		for LINE in INPUT.splitlines():
+			if CHECKING == True:
+				if "Channel" in LINE:
+					CHANNEL = LINE[-2:]
+					break
 
+			if "0x1105" in LINE: 
+				CHECKING = True
+    				continue
+
+		subprocess.Popen('obexftp -b ' + MAC + ' --channel ' + CHANNEL.strip() + ' -p files/welcome.jpg', shell=True, stdout=subprocess.PIPE)
+
+		
         time.sleep(CHECKINTERVAL)
